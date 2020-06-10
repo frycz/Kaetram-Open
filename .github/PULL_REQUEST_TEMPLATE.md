@@ -4,6 +4,7 @@ Provide issue number which is resolved by the PR or describe what your changes p
 **How to test (feature)**
 - Step 1
 - Step 2
+- Step 3
 - ...
 
 **How to test (potential regressions)**
