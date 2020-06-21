@@ -1,12 +1,14 @@
 /* global module */
 
 import _ from 'underscore';
+import * as dotenv from 'dotenv';
 import * as bcrypt from 'bcrypt';
 import log from '../../util/log';
-import config from '../../../config';
 import { MongoClient, Db } from 'mongodb';
 import Loader from './loader';
 import Creator from './creator';
+
+dotenv.config();
 
 class MongoDB {
     host: string;
@@ -14,18 +16,21 @@ class MongoDB {
     user: string;
     password: string;
     database: string;
+    useSrv: boolean;
 
     loader: Loader;
     creator: Creator;
 
     connection: Db;
 
-    constructor(host, port, user, password, database) {
+    constructor(host, port, user, password, database, useSrv) {
         this.host = host;
         this.port = port;
         this.user = user;
         this.password = password;
         this.database = database;
+        this.database = database;
+        this.useSrv = useSrv;
 
         this.loader = new Loader(this);
         this.creator = new Creator(this);
@@ -36,8 +41,8 @@ class MongoDB {
     getDatabase(callback, type?) {
         let url = `mongodb://${this.host}:${this.port}/${this.database}`;
 
-        if (config.mongoAuth)
-            url = `mongodb://${this.user}:${this.password}@${this.host}:${this.port}/${this.database}`;
+        if (process.env.MONGODB_AUTH)
+            url = `mongodb${this.useSrv ? '+srv' : ''}://${this.user}:${this.password}@${this.host}${this.useSrv ? '' : `:${this.port}`}/${this.database}`;
 
         let client = new MongoClient(url, {
             useUnifiedTopology: true,

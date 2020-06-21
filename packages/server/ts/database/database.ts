@@ -1,6 +1,8 @@
 import MongoDB from './mongodb/mongodb';
-import config from '../../config';
+import * as dotenv from 'dotenv';
 import log from '../util/log';
+
+dotenv.config();
 
 class Database {
     database: any;
@@ -14,11 +16,12 @@ class Database {
             case 'mongo':
             case 'mongodb':
                 this.database = new MongoDB(
-                    config.mongoHost,
-                    config.mongoPort,
-                    config.mongoUser,
-                    config.mongoPassword,
-                    config.mongoDatabase
+                    process.env.MONGODB_HOST,
+                    process.env.MONGODB_PORT,
+                    process.env.MONGODB_USER,
+                    process.env.MONGODB_PASSWORD,
+                    process.env.MONGODB_DATABASE,
+                    process.env.MONGODB_USE_SRV,
                 );
                 break;
 
